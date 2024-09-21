@@ -1,3 +1,5 @@
+""" This module contains the FastAPI application. """
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 
@@ -7,30 +9,34 @@ from routes.instructor_routes import instructors_route
 
 # Base de datos
 from config.database import database as connection
-from contextlib import asynccontextmanager
 
 
 #on startup
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Conectar a la base de datos si la conexión está cerrada
+    """
+    FastAPI Lifespan: Connect to database if connection is closed on startup, 
+    and close connection when application is shutdown.
+    """
+    #Connects to the db if the connection is closed
     if connection.is_closed():
         connection.connect()
     try:
-        yield  # Aquí es donde se ejecutará la aplicación
+        yield  # Here the app will be executed
     finally:
-        # Cerrar la conexión cuando la aplicación se detenga
+        # Close the connection when the application is shutdown
         if not connection.is_closed():
             connection.close()
 
 
 app = FastAPI(lifespan=lifespan)
 
-#on shutdown
-
 #Docs
 @app.get('/')
 def read_root():
+    """
+    Redirects to the docs from API in the route /docs
+    """
     return RedirectResponse('/docs')
 
 #on routes
