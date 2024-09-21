@@ -8,10 +8,12 @@ Contains the following functions:
     - update_instructor (async): Update an instructor
     - delete_instructor (async): Delete an instructor
 """
+
 from models.instructor_model import Instructor
 from starlette.exceptions import HTTPException
 from config.database import InstructorModel
 from peewee import DoesNotExist
+
 
 async def get_instructors_service():
     """
@@ -58,7 +60,11 @@ async def delete_instructor_service(instructor_id: int):
     Delete an instructor
     """
     try:
-        instructor = InstructorModel.delete().where(InstructorModel.id == instructor_id).execute()
+        instructor = (
+            InstructorModel.delete()
+            .where(InstructorModel.id == instructor_id)
+            .execute()
+        )
         return instructor
     except DoesNotExist as exc:
         raise HTTPException(404, "instructor not found") from exc

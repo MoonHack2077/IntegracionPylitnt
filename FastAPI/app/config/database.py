@@ -33,6 +33,7 @@ class InstructorModel(Model):
         """
         Instructors table
         """
+
         database = database
         table_name = "instructors"
 
@@ -41,6 +42,7 @@ class CourseModel(Model):
     """
     Model for courses
     """
+
     id = AutoField(primary_key=True)
     name = CharField(max_length=50)
     description = CharField(max_length=50)
@@ -50,5 +52,6 @@ class CourseModel(Model):
         """
         Courses table
         """
+
         database = database
         table_name = "courses"
