@@ -2,8 +2,11 @@
 This module contains the routes for instructors
 """
 from fastapi import APIRouter
-from app.models.instructor_model import Instructor
-from services.instructor_controller import get_instructor_service, get_instructors_service, create_instructor_service, delete_instructor_service
+from models.instructor_model import Instructor
+from services.instructor_controller import (get_instructor_service,
+                                            get_instructors_service,
+                                            create_instructor_service,
+                                            delete_instructor_service)
 
 instructors_route = APIRouter()
 
@@ -18,12 +21,12 @@ def get_instructor(instructor_id: int):
     get_instructor_service(instructor_id)
 
 @instructors_route.post('/')
-async def create_instructor(instructor: instructor_model):
+async def create_instructor(instructor: Instructor):
     """Create a new instructor"""
     create_instructor_service(instructor)
 
 @instructors_route.put('/{instructors_id}')
-async def update_instructor(instructor_id: int, instructor: instructor_model):
+async def update_instructor(instructor_id: int, instructor: Instructor):
     """Update an instructor"""
     return {"instructor_id": instructor_id, **instructor.dict()}
 

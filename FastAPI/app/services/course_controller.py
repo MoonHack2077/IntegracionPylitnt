@@ -11,6 +11,7 @@ Contains the following functions:
 from models.course_model import Course
 from starlette.exceptions import HTTPException
 from config.database import CourseModel
+from peewee import DoesNotExist
 
 async def get_courses_service():
     """
@@ -19,7 +20,7 @@ async def get_courses_service():
     try:
         courses = list(CourseModel.select())
         return courses
-    except Exception as e:
+    except DoesNotExist as e:
         print(e)
 
 def get_course_service(course_id: int):
@@ -29,20 +30,22 @@ def get_course_service(course_id: int):
     try:
         course = CourseModel.get(CourseModel.id == course_id)
         return course
-    except CourseModel.DoesNotExist:
-        raise HTTPException(404, "course not found")
+    except DoesNotExist as exc:
+        raise HTTPException(404, "course not found") from exc
 
-async def create_course_service(course: course_model):
+async def create_course_service(course: Course):
     """
     Create a new course
     """
     try:
-        CourseModel.create(name=course.name, description=course.description, id_instructor=course.id_instructor)
+        CourseModel.create(name=course.name,
+                           description=course.description,
+                           id_instructor=course.id_instructor)
         return course
-    except Exception as e:
+    except DoesNotExist as e:
         print(e)
 
-async def update_course_service(course_id: int, course: course_model):
+async def update_course_service(course_id: int, course: Course):
     """
     Update a course
     """
@@ -53,7 +56,7 @@ async def delete_course_service(course_id: int):
     Delete a course
     """
     try:
-        course = CourseModel.Delete(CourseModel.id == course_id)
+        course = CourseModel.delete().where(CourseModel.id == course_id).execute()
         return course
-    except CourseModel.DoesNotExist:
-        raise HTTPException(404, "course not found")
+    except DoesNotExist as exc:
+        raise HTTPException(404, "course not found") from exc

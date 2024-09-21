@@ -3,7 +3,10 @@ This module contains the routes for courses
 """
 from fastapi import APIRouter
 from models.course_model import Course
-from app.services.course_controller import get_course_service, get_courses_service, create_course_service, delete_course_service
+from services.course_controller import (get_course_service,
+                                        get_courses_service,
+                                        create_course_service,
+                                        delete_course_service)
 
 courses_route = APIRouter()
 
