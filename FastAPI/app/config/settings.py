@@ -3,14 +3,13 @@ Settings module
 
 This module contains the settings for the application
 """
+
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-ENV = os.getenv(
-    "ENV", "dev"
-)  # 'dev' will be the value by default
+ENV = os.getenv("ENV", "dev")  # 'dev' will be the value by default
 
 if ENV == "production":
     DATABASE = {
